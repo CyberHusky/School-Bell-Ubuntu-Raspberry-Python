@@ -6,8 +6,9 @@ import os
 from Tkinter 	  import *
 from playsound    import playsound
 from PIL 		  import Image
-from time 		  import gmtime, strftime
+from time 		  import gmtime, strftime, localtime, strptime
 from tkFileDialog import askopenfilename 
+from threading 	  import Timer
 
 # ====================================
 
@@ -20,9 +21,18 @@ fields = ['Lesson 1:' , 'Lesson 2:', 'Lesson 3:', 'Lesson 4:' , 'Lesson 5:' , 'L
 len(fields)
 
 global mute_logo_visible
-times_from  = ['09:15:00' , '10:10:00' , '11:20:00' , '12:15:00' , '14:00:00' , '15:00:00']
-times_to	= ['10:10:00' , '10:55:00' , '12:05:00' , '13:00:00' , '14:45:00' , '15:45:00']
 
+global time_of_lesson, num_lesson
+global time_bell_tick, time_of_break, times_to, times_from, h, m
+num_lesson = 0
+h = -1
+m = -1
+times_to   = ['09:15:00' , '10:10:00' , '11:20:00' , '12:15:00' , '14:00:00' , '15:00:00']
+times_from = ['10:10:00' , '10:55:00' , '12:05:00' , '13:00:00' , '14:45:00' , '15:45:00']
+times_bell = times_to + times_from
+time_of_lesson = 45 * 60 #seconds of lesson
+time_of_break  = 10 * 60 #seconds of break
+time_bell_tick = time_of_lesson
 
 global default_music 
 default_music = os.getcwd() + "/sound.mp3"
@@ -30,7 +40,7 @@ default_music = os.getcwd() + "/sound.mp3"
 #print default_music
 # playsound("/home/artem/PycharmProjects/SchoolBell/sound.mp3") # Play sound
 
-
+# Button for mute sound - NOT WORKING NOW!!!
 def buttonMute():
 	global mute_logo_visible
 
@@ -41,9 +51,14 @@ def buttonMute():
 		mute_logo.grid(row=8, column=1, columnspan=1, rowspan=1, sticky="W")
 		mute_logo_visible = True
 
+# Clock and start music function
 def tick():
     global time1
+    global time_bell_tick, time_of_break
     global default_music
+    global time_of_lesson
+    global times_to, times_from
+    global num_lesson, times_bell, h, m
     # get the current local time from the PC
     time2 = time.strftime('%H:%M:%S')
     # if time string has changed, update it
@@ -51,14 +66,86 @@ def tick():
         time1 = time2
         clock.config(text=time2)
         # calls itself every 200 milliseconds
-        # to update the time display as needed
-        # could use >200 ms, but display gets jerky
+		# to update the time display as needed
+		# could use >200 ms, but display gets jerky
     clock.after(200, tick)
-    #print time2
-    for i in xrange(0, len(times_from)):
-    	if (time2 == times_from[i]) or (time2 == times_to[i]):
+	
+	# === Timer
+    localtime = time.localtime()
+    #time_bell_tick_t = time.strptime(times_bell[num_lesson],'%H:%M:%S')
+    print("num_lesson: " + str(num_lesson))
+    #m = time_bell_tick_t.tm_min - localtime.tm_min -1
+    #h = time_bell_tick_t.tm_hour - localtime.tm_hour - 1
+    #print("h: "+str(h) + ", m: " + str(m))
+    begin_les = time.strptime(times_bell[0],'%H:%M:%S')
+    begin_les = begin_les.tm_hour
+    end_les   = time.strptime(times_bell[-1],'%H:%M:%S')
+    end_les   = end_les.tm_hour
+
+    #print(str(begin_les) + " " + str(end_les))
+
+    if ( localtime.tm_hour > begin_les ) and ( localtime.tm_hour < end_les ):
+    	time_bell_tick_t = time.strptime(times_bell[num_lesson],'%H:%M:%S')
+    	h = time_bell_tick_t.tm_hour - localtime.tm_hour
+    	m = time_bell_tick_t.tm_min  - localtime.tm_min  - 1
+    	s = 59 - localtime.tm_sec #- time_bell_tick_t.tm_sec
+    	time_to_bell.config(text = str(m) + ":" + str(s) )
+
+    	print("localtime: "+str(localtime.tm_min) + ", time to bell: " + str(time_bell_tick_t.tm_hour) + ":" + str(time_bell_tick_t.tm_min))
+
+    	if (h == 0) and (m < 0):
+    		num_lesson += 1
+    else:
+    	num_lesson = 0
+    	time_to_bell.config(text = "END OF LESSONS!!!")
+
+    # === MUSIC PLAY
+    for i in xrange(0, len(times_bell)):
+    	if (time2 == times_bell[i]) or (time2 == times_bell[i]):
     		playsound(default_music)
 
+'''
+    if (num_lesson > len(times_bell)):
+    	time_to_bell.config(text = "END OF LESSONS!!!")
+    	num_lesson = 0
+    elif (h < 0):
+    	num_lesson += 1
+    	localtime = time.localtime()
+    	time_bell_tick_t = time.strptime(times_bell[num_lesson],'%H:%M:%S')
+    	m = time_bell_tick_t.tm_min - localtime.tm_min - 1
+    	h = time_bell_tick_t.tm_hour - localtime.tm_hour 
+    	s = 59 - localtime.tm_sec #- time_bell_tick_t.tm_sec
+    	#time_to_bell.config(text = str(m) + ":" + str(s) )
+    	if (m < 0):
+    		num_lesson += 1
+    		localtime = time.localtime()
+    		time_bell_tick_t = time.strptime(times_bell[num_lesson],'%H:%M:%S')
+    		m = time_bell_tick_t.tm_min - localtime.tm_min - 1
+    		h = time_bell_tick_t.tm_hour - localtime.tm_hour - 1
+    		s = 59 - localtime.tm_sec #- time_bell_tick_t.tm_sec
+    	else:
+    		time_to_bell.config(text = str(m) + ":" + str(s) )
+'''    
+    	
+
+
+    		
+
+def bell():
+	time_to_bell.after(1000, bell)
+	global time_bell_tick
+	#time_bell_tick -= 1
+	#m = time_bell_tick // 60
+	#s = time_bell_tick-m*60
+	#time_to_bell.config(text = str(m) + ":" + str(s) )
+    
+
+
+def timeout():
+	print("BELLING")
+	time_to_bell.config(text = "???")
+
+# Open file 
 def file_open():
 	global default_music
 	default_music = askopenfilename()
@@ -67,24 +154,26 @@ def file_open():
 
 if __name__ == '__main__':
 
-	global default_music
+	global default_music # directory of file
+	global time_bell_tick
 
 	# === Window ===
 	window = tk.Tk()
 	window.title('SchoolBell. V1.0a')
+	window.resizable(0, 0)
 	#window.geometry('500x200')
 
 	time1 = ''
-	time_bell1 = ''
+	time_bell_tick = time_of_lesson
 	# === Labels ===
-	for i in xrange(1, len(fields)):
-		Label(window, text=fields[i-1]	  			  , font=("Ubuntu", 8)).grid(row=i)
-		Label(window, text=times_from[i-1][0:5], background="lightblue", width = 10, font=("Ubuntu", 8)).grid(row=i, column=1)
-		Label(window, text=times_to[i-1][0:5]  , background="lightblue", width = 10, font=("Ubuntu", 8)).grid(row=i, column=2)
+	for i in xrange(0, len(fields)):
+		Label(window, text=fields[i]	  			  , font=("Ubuntu", 8)).grid(row=i+1)
+		Label(window, text=times_to[i][0:5], background="lightblue", width = 10, font=("Ubuntu", 8)).grid(row=i+1, column=1)
+		Label(window, text=times_from[i][0:5]  , background="lightblue", width = 10, font=("Ubuntu", 8)).grid(row=i+1, column=2)
 		
 
-	Label(window, text="From:", font=("Ubuntu", 8)).grid(row=0, column=1)
-	Label(window, text="To:"  , font=("Ubuntu", 8)).grid(row=0, column=2)
+	Label(window, text="Begin:", font=("Ubuntu", 8)).grid(row=0, column=1)
+	Label(window, text="End:"  , font=("Ubuntu", 8)).grid(row=0, column=2)
 
 	button_mute = tk.Button(window,
 								text = "Mute", font=("Ubuntu", 8),
@@ -106,16 +195,17 @@ if __name__ == '__main__':
 	#time_now.configure(text = strftime("%X"))
 	clock = Label(window, background="#F23A3A", font=("Ubuntu", 14))
 	clock.grid(row=3, column=3)
-	tick()
 	
-
+	
 
 	
 	Label(window, text = "TIME TO BELL:", font=("Ubuntu", 14)).grid(row=4, column=3)
 	time_to_bell = Label(window, background="#F23A3A")
 	time_to_bell.grid(row=5, column=3)
-	time_to_bell.configure(text = "???")
-	
+	time_to_bell.config(text = "???")
+
+	tick()
+	bell()
 
 	mute_photo = PhotoImage(file="volume-off-indicator.png")
 	mute_logo = Label(image = mute_photo)
@@ -141,6 +231,10 @@ if __name__ == '__main__':
 	bell_logo = Label(image = bell_photo)
 	bell_logo.image = bell_photo
 	bell_logo.grid(row=1, column=5, columnspan=2, rowspan=3)
+
+
+
+
 
 
 	window.mainloop()
