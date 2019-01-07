@@ -28,6 +28,7 @@ Setup in source file:
 - You could choose logo of your school;
 - You could choose number of lessons.
 
+[[https://github.com/CyberHusky/School-Bell/blob/master/program_gif.gif|alt=octocat]]
 
 ## Authors
 Gordieiev Artem. For donation or questions you could write me on email: gordieiev.artem@gmail.com
