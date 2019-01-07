@@ -20,8 +20,8 @@ What Schoolbell program can do:
 - Show current time;
 - Show time for nearest bell;
 - Play music on the chosen time (you could change time only in .py file, not in executable file);
-- Play music when you need
-- You could choose music for play (default: sound.mp3)
+- Play music when you need;
+- You could choose music for play (default: sound.mp3).
 
 Setup in source file:
 - You could choose time for bell in your school. Program automatically should to adapts to your setup;
