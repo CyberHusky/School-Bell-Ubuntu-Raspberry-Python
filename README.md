@@ -28,8 +28,7 @@ Setup in source file:
 - You could choose logo of your school;
 - You could choose number of lessons.
 
-![GitHub Logo](/program_gif.gif)
-[Alt Text](url)
+![GitHub Logo](/program_gif.gif)(url)
 
 
 ## Authors
