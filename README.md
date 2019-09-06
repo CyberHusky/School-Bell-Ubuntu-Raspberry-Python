@@ -33,6 +33,8 @@ apt-get install python-tk python3-tk tk-dev
 pip install --user pillow
 pip3 install --user Image
 
+```
+
 For make an exe file use:
 ```
 pip install pyinstaller
