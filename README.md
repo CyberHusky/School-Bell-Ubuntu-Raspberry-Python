@@ -112,6 +112,7 @@ dtparam=i2c_arm=on
 ```
 
 Main sites that you could use for help:
+
 https://www.raspberrypi-spy.co.uk/2015/05/adding-a-ds3231-real-time-clock-to-the-raspberry-pi/
 https://www.raspberrypi.org/forums/viewtopic.php?t=115080
 https://www.raspberrypi.org/documentation/configuration/device-tree.md
