@@ -55,6 +55,72 @@ In RaspberryPi I was use pure python execution with script in "launcher.sh" file
 
 Note that you should uncomment block "for RaspberryPi" in source code and comment other part of code (read source code for details). Furthermore I added sleep timer before start the program, so if you want try program not in start of OS you should wait 40 sec or just comment this code for awhile.
 
+## RTC to RaspberryPi
+
+* install first:
+```
+sudo apt-get install i2c-tools
+```
+* Add device to the system:
+```
+sudo nano /boot/config.txt
+```
+Add line:
+```
+dtoverlay=i2c-rtc,ds1307
+```
+* Add module:
+```
+sudo nano /etc/modules
+```
+Add line: 
+```
+snd-bcm2835
+i2c-bcm2835
+i2c-dev
+rtc-ds3231
+```
+* Then make detect the divice:
+```
+sudo i2cdetect -y 0  # (if using v1 Raspberry Pi or)
+sudo i2cdetect -y 1  # (if using v2 Raspberry Pi) - it was usefull for me
+```
+* Synchronise device. Open:
+```
+sudo nano /etc/rc.local
+```
+Add the following two lines before the "exit 0" line :
+```
+echo ds3231 0x68 > /sys/class/i2c-adapter/i2c-1/new_device 
+hwclock -s
+```
+
+* Time Zones. Maybe you need to change timezone. You can do it with next command:
+```
+sudo raspi-config
+```
+and then select “Internationalisation Options” followed by “Change Timezone”.
+
+
+Troubleshooting.
+
+Sometimes RaspberryPi doesn't on I2C interface. So open file /boot/config.txt and add or uncomment next line:
+```
+dtparam=i2c1=on (or dtparam=i2c0=on on old models)
+dtparam=i2c_arm=on
+```
+
+Main sites that you could use for help:
+https://www.raspberrypi-spy.co.uk/2015/05/adding-a-ds3231-real-time-clock-to-the-raspberry-pi/
+https://www.raspberrypi.org/forums/viewtopic.php?t=115080
+https://www.raspberrypi.org/documentation/configuration/device-tree.md
+https://raspberrypi.ru/blog/598.html
+https://www.abelectronics.co.uk/kb/article/30/rtc-pi-on-a-raspberry-pi-raspbian-stretch
+
+
+
+
+
 ## Authors
 Gordieiev Artem. For questions you could write me on email: gordieiev.artem@gmail.com
 
