@@ -1,6 +1,7 @@
 # SchoolBell
 
-School bell in Python (with GUI - Tkinter + .grid) that can play mp3 music at the time and have GUI with timer. Insulator for Linux_x64 version (tested on Ubuntu 16.04). If you make Windows installer (or EXE) it would be helpful for me!
+School bell in Python (with GUI - Tkinter + .grid) that can play mp3 music at the time and have GUI with timer. Execution file for Linux_x64 version is avaliable (tested only on Ubuntu 16.04). If you make Windows installer (or EXE) it would be helpful for me!
+
 Tested on Python version: 2.7.12
 On Pythond 3 sould work too. 
 
@@ -53,7 +54,7 @@ In RaspberryPi I was use pure python execution with script in "launcher.sh" file
 @reboot DISPLAY=:0 sh /home/pi/Desktop/School-Bell-master/launcher.sh >/home/pi/Desktop/School-Bell-master/logs/cronlog  2>&1
 ```
 
-Note that you should uncomment block "for RaspberryPi" in source code and comment other part of code (read source code for details). Furthermore I added sleep timer before start the program, so if you want try program not in start of OS you should wait 40 sec or just comment this code for awhile.
+Note that you should uncomment block "for RaspberryPi" in source code and comment other part of code (read source code for details). Furthermore, I added sleep timer before start the program, so if you want try program (not in autostart of OS) you should wait 40 sec or just comment that code for awhile.
 
 ## RTC to RaspberryPi
 
