@@ -30,14 +30,20 @@ print(begin_ms)
 
 # ================ SETUP ====================
 
-fields = ['Lesson 1:' , 'Lesson 2:', 'Lesson 3:', 'Lesson 4:' , 'Lesson 5:' , 'Lesson 6:', 'Lesson 7:', 'Lesson 8:']
+fields = ['Lesson 1:' , 'Lesson 2:', 'Lesson 3:', 'Lesson 4:' , 'Lesson 5:' , 'Lesson 6:', 'Lesson 7:', 'Lesson 8:', 'Lesson 9:', 'Lesson 10:', 'Lesson 11:']
 len(fields)
 
 global times_bell, times_bell_sec
 
 # === Times for bell ===
-times_bell = ['09:15:00', '10:00:00', '10:10:00', '10:55:00', '11:20:00', '12:05:00', '12:15:00', '13:00:00',
-			  '14:00:00', '14:45:00', '15:00:00', '15:45:00', '16:00:00', '16:45:00', '17:00:00', '17:45:00']
+times_bell = ['08:30:00','09:05:00','09:15:00', '10:00:00', '10:10:00', '10:55:00', '11:10:00', '11:55:00', '12:15:00', '13:00:00',
+			  '13:45:00', '14:30:00', '14:40:00', '15:25:00', '15:35:00', '16:20:00', '16:40:00', '17:25:00', '17:35:00', '18:20:00', '18:30:00', '19:00:00']
+
+'''
+times_bell = ['08:30:00','09:05:00','09:15:00', '10:00:00', '10:20:00', '11:05:00', '11:25:00', '12:10:00', '12:30:00', '13:15:00',
+			  '14:15:00', '15:00:00', '15:15:00', '16:00:00', '16:30:00', '17:15:00', '17:30:00', '18:15:00', '18:30:00', '19:00:00']
+'''
+
 	# Make array with bell times in seconds
 times_bell_sec=[]
 for i in range(0, len(times_bell)):
@@ -173,15 +179,15 @@ if __name__ == '__main__':
 	button_file = Button(window, font=("Ubuntu", 8),
 								 text = "FILE...",
 								 command = file_open)
-	button_file.grid(row=9, column=0)
+	button_file.grid(row=count+1, column=0)
 
 	entry_file = Entry(window)
-	entry_file.grid(row=9, column=1, columnspan=2)
+	entry_file.grid(row=count+1, column=1, columnspan=2)
 	entry_file.insert(END, default_music)
 
 	tk.Button(window,
 					text = "Play again...", font=("Ubuntu", 8),
-					command = playagain).grid(row=9, column=3)
+					command = playagain).grid(row=count+1, column=3)
 
 
 	# === Bell LOGO ===
