@@ -39,7 +39,7 @@ url = "https://api.ukrainealarm.com/api/v3/alerts"
 
 headers = CaseInsensitiveDict()
 headers["accept"] = "application/json"
-headers["Authorization"] = "086c31f0:fab40d26ccec9c6deaa47265b753fdc5"
+headers["Authorization"] = "YorApiKey"
 
 resp = requests.get(url, headers=headers)
 data = resp.json()
