@@ -1,3 +1,4 @@
+import json
 import sys
 
 if sys.version_info[0] == 3:
@@ -23,42 +24,18 @@ from time import gmtime, strftime, localtime, strptime
 # from tkFileDialog import askopenfilename
 
 # ApiKey
-import csv
-import codecs
-import requests
-import urllib.request
-import urllib.error
-
-
 
 import requests
-import pprint
 from requests.structures import CaseInsensitiveDict
 
-url = "https://api.ukrainealarm.com/api/v3/alerts"
-
-headers = CaseInsensitiveDict()
-headers["accept"] = "application/json"
-headers["Authorization"] = "YorApiKey"
-
-resp = requests.get(url, headers=headers)
-data = resp.json()
-
-#print(data["regionId"])
-
-for i in data:
-    print(i.items())
-    if i.keys() == 'regionId':
-        print(i.values())
-
-#print(resp.json())
 
 
-'''
+
+
 
 # ================ WELCOME ====================
 
-begin_ms = "Welcome to School bell app. This app will help you to automatizate your school bell. \n What you need?\n-PC with Ubuntu;\n-Installed Python 3.\nAuthor of app: Gordieiev Artem (gordieiev.artem@gmail.com). V1.2. \n\n"
+begin_ms = "Welcome to School bell app. This app will help you to automatizate your school bell. \n What you need?\n-PC with Ubuntu;\n-Installed Python 3.\nAuthor of app: Gordieiev Artem (gordieiev.artem@gmail.com). V2.0. \n\n"
 print(begin_ms)
 
 # ================ SETUP ====================
@@ -86,6 +63,9 @@ for i in range(0, len(times_bell)):
 # === Music setup ===
 global default_music
 default_music = os.getcwd() + "/sound.mp3"
+
+global default_alert_sound
+default_alert_sound = os.getcwd() + "/Air_alert.mp3"
 
 
 # === for RaspberryPi ==
@@ -116,6 +96,47 @@ def time2sec(time_arg):
     timeinsec = timeis.tm_hour * 3600 + timeis.tm_min * 60 + timeis.tm_sec
     return timeinsec
 
+
+def alert_checker():
+    url = "https://api.ukrainealarm.com/api/v3/alerts"
+    # url = "https://api.ukrainealarm.com/api/v3/regions" # info about all regions
+
+    headers = CaseInsensitiveDict()
+    headers["accept"] = "application/json"
+    headers["Authorization"] = "YourAPI"
+
+    resp = requests.get(url, headers=headers)
+    print(resp.status_code)
+
+    data = resp.json()
+    print(data[0])
+
+    region_alert = []
+    position = 12
+
+    for i in data:
+        dict_data = dict(i)
+        #print(dict_data["regionId"]) # 31 - Kyiv
+        region_alert.append(dict_data["regionName"])
+
+        Label(window, text="Regions alert:", font=("Ubuntu", 8)).grid(row=position, column=0)
+        Label(window, text=dict_data["regionName"], background="red", font=("Ubuntu", 8)).grid(row=position, column=1)
+        position += 1
+
+        siren_photo = PhotoImage(file="siren_pic.png")
+
+        label_siren = Label(image=siren_photo)
+        label_siren.image = siren_photo
+        label_siren.grid(row=8, column=5, columnspan=5, rowspan=7)
+
+        if dict_data["regionId"] == '31':
+
+            print("Alert in Kyiv!!!")
+            playsound(default_alert_sound)
+        else:
+            label_siren.grid_remove()
+
+    print(region_alert)
 
 # === Clock function + play music
 def tick():
@@ -152,6 +173,10 @@ def tick():
         if (time2 == times_bell[i]) or (time2 == times_bell[i]):
             playsound(default_music)
 
+    # === Air Alert
+    alert_checker()
+
+
 
 # === END of Clock function
 
@@ -184,8 +209,8 @@ if __name__ == '__main__':
     # Make lessons time labels
     count = 0
     for i in range(0, len(times_bell), 2):
-        Label(window, text=times_bell[i][0:5], background="lightblue", width=10, font=("Ubuntu", 8)).grid(row=count + 1,
-                                                                                                          column=1)
+        Label(window, text=times_bell[i][0:5], background="lightblue", width=10, font=("Ubuntu", 8)).grid(
+            row=count + 1, column=1)
         Label(window, text=times_bell[i + 1][0:5], background="lightblue", width=10, font=("Ubuntu", 8)).grid(
             row=count + 1, column=2)
         count += 1
@@ -204,9 +229,9 @@ if __name__ == '__main__':
     lable_belltime.grid(row=5, column=3)
     lable_belltime.config(text="???")
 
-    tick()
 
     # === FILE buttons + entry + play again
+    '''
     button_file = Button(window, font=("Ubuntu", 8),
                          text="FILE...",
                          command=file_open)
@@ -215,6 +240,8 @@ if __name__ == '__main__':
     entry_file = Entry(window)
     entry_file.grid(row=count + 1, column=1, columnspan=2)
     entry_file.insert(END, default_music)
+    '''
+
 
     tk.Button(window,
               text="Play again...", font=("Ubuntu", 8),
@@ -228,9 +255,11 @@ if __name__ == '__main__':
     label_logo.image = bell_photo
     label_logo.grid(row=1, column=5, columnspan=2, rowspan=7)
 
+    tick()
+
     window.mainloop()
 
-'''
+
 
 
 # === TRASH ===
