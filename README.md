@@ -28,12 +28,12 @@ Preinstall next stuff:
 apt-get install python-gst-1.0 gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-tools
 ```
 
-For develop use next libraries:
+For develop use next libraries (try pip or pip3 for different installs):
 ```
 apt-get install python-tk python3-tk tk-dev
 pip install --user pillow
 pip3 install --user Image
-
+pip install playsound
 ```
 
 For make an exe file use:
@@ -44,6 +44,11 @@ with command:
 ```
 pyinstaller --onefile <your_script_name>.py
 ```
+or
+```
+python3 -m PyInstaller --onefile <your_script_name>.py
+```
+
 
 If you need to change num of lesson you should change "time_bell" value and "row" value in "FILE button + entry + play again" block in source file.
 
