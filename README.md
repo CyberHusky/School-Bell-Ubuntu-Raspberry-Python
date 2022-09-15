@@ -1,9 +1,9 @@
 # SchoolBell
 
-School bell in Python (with GUI - Tkinter + .grid) that can play mp3 music at the time and have GUI with timer. Execution file for Linux_x64 version is avaliable (tested only on Ubuntu 16.04). If you make Windows installer (or EXE) it would be helpful for me!
+School bell in Python (with GUI - Tkinter) that can play mp3 music at the time and have GUI with timer. Also in program added air alert signal detecting in Ukraine. Program was tested in Ubuntu and IOS. 
+If you make Windows installer (or EXE) it would be helpful for me!
 
-Tested on Python version: 2.7.12
-On Pythond 3 sould work too. 
+Tested on Python version: 3.10.7
 
 ## Features
 
@@ -11,46 +11,65 @@ What Schoolbell program can do:
 - Show current time;
 - Show time for nearest bell;
 - Play music on the chosen time (you could change time only in .py file, not in executable file);
-- Play music when you need;
-- You could choose music for play (default: sound.mp3).
+- Play music when you need - tap on button (default: sound.mp3);
+- Detecting air alert region in Ukraine and show it in GUI.
+- Play music when air alert is in your region (default: Air_alert.mp3, default region: Kyiv)
 
 Setup in source file:
-- You could choose time for bell in your school. Program automatically should to adapts to your setup;
-- You could choose logo of your school;
-- You could choose number of lessons.
+- You could setup time for bell in your school. Program automatically should to adapts to your setup;
+- You could setup logo of your school;
+- You could setup number of lessons;
+- You could setup your region for air alert.
 
 ![GitHub Logo](/program_gif.gif)
 
 ## Getting Started
 
-Preinstall next stuff:
+Preinstall next stuff (most of this lybraries are installed in Python 3.10):
 ```
-apt-get install python-gst-1.0 gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-tools
+sudo apt-get install python-gst-1.0 gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-tools
 ```
 
-For develop use next libraries (try pip or pip3 for different installs):
+For develop use next libraries (I recomended install with pip3 on Python 3.6 or above):
 ```
-apt-get install python-tk python3-tk tk-dev
-pip install --user pillow
+sudo apt-get install python3-tk tk-dev
+pip3 install --user pillow
 pip3 install --user Image
-pip install playsound
+pip3 install --user playsound
 ```
 
-For make an exe file use:
+For make an executible file use:
 ```
-pip install pyinstaller
+pip3 install pyinstaller
 ```
-with command:
+make executible file with next command:
 ```
-pyinstaller --onefile <your_script_name>.py
-```
-or
-```
-python3 -m PyInstaller --onefile <your_script_name>.py
+python3 -m pyinstaller --onefile <your_script_name>.py
 ```
 
+If you need to change num of lesson you should change "time_bell" value block in source file.
 
-If you need to change num of lesson you should change "time_bell" value and "row" value in "FILE button + entry + play again" block in source file.
+## Air alert and API
+
+If you need working air alert signal in Ukraine you need to visite next site and ask creators for API key:
+https://api.ukrainealarm.com/
+After you take an API you need to copy it into next section of code:
+
+```
+headers = CaseInsensitiveDict()
+headers["accept"] = "application/json"
+headers["Authorization"] = "YOUR API"
+```
+
+...where "YOUR API" is given key to you before. 
+
+Also you need to enter your region of Ukraine into next variable:
+
+```
+my_region = '31'  # Kyiv is 31
+```
+
+Read tutorial for details from your email, when you recieve the API key from creators.
 
 ## RaspberryPi 
 
@@ -132,4 +151,9 @@ https://www.abelectronics.co.uk/kb/article/30/rtc-pi-on-a-raspberry-pi-raspbian-
 Gordieiev Artem. For questions you could write me on email: gordieiev.artem@gmail.com
 
 It would be awesome if you help me to make this program better (make a different language, make a setup function in GUI).
+
+For donation you can use next channel:
+PayPal: https://www.paypal.com/donate/?hosted_button_id=GYP25ZFAUWCTW 
+Monobank:
+https://send.monobank.ua/jar/AdWGndoK6k
 
