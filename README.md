@@ -154,6 +154,5 @@ It would be awesome if you help me to make this program better (make a different
 
 For donation you can use next channel:
 PayPal: https://www.paypal.com/donate/?hosted_button_id=GYP25ZFAUWCTW 
-Monobank:
-https://send.monobank.ua/jar/AdWGndoK6k
+Monobank: https://send.monobank.ua/jar/AdWGndoK6k
 
