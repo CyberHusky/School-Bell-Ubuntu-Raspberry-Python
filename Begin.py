@@ -99,7 +99,7 @@ def alert_checker():
 
     headers = CaseInsensitiveDict()
     headers["accept"] = "application/json"
-    headers["Authorization"] = "Your API"
+    headers["Authorization"] = "086c31f0:fab40d26ccec9c6deaa47265b753fdc5"
 
     try:
         resp = requests.get(url, headers=headers)
@@ -127,16 +127,16 @@ def alert_checker():
             label_siren.image = siren_photo
             label_siren.grid(row=8, column=5, columnspan=5, rowspan=7)
 
-            if dict_data["regionId"] == '31' and sound_alert_count > 0:
+            if dict_data["regionId"] == '16' and sound_alert_count > 0:
                 print("Alert in Kyiv!!!")
                 playsound(default_alert_sound)
                 sound_alert_count -= 1
-            elif dict_data["regionId"] == '31' and sound_alert_count < 1:
+            elif dict_data["regionId"] == '16' and sound_alert_count < 1:
                 pass
             else:
                 sound_alert_count = 2
                 label_siren.grid_remove()
-
+        #print(sound_alert_count)
         print(region_alert)
     except:
         pass
