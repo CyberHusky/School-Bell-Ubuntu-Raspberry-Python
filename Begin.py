@@ -28,7 +28,8 @@ from time import gmtime, strftime, localtime, strptime
 import requests
 from requests.structures import CaseInsensitiveDict
 
-sound_alert_count = 2  # num of alert music playing when alert come
+sound_alert_count = 1  # num of alert music playing when alert come
+my_region = '31'  # Kyiv is 31
 
 # ================ WELCOME ====================
 
@@ -44,10 +45,17 @@ len(fields)
 global times_bell, times_bell_sec
 
 # === Times for bell ===
-times_bell = ['08:30:00', '09:05:00', '09:15:00', '10:00:00', '10:10:00', '10:55:00', '11:10:00', '11:55:00',
+times_bell = ['08:30:00', '09:05:00',
+              '09:15:00', '10:00:00',
+              '10:10:00', '10:55:00',
+              '11:10:00', '11:55:00',
               '12:15:00', '13:00:00',
-              '13:45:00', '14:30:00', '14:40:00', '15:25:00', '15:35:00', '16:20:00', '16:40:00', '17:25:00',
-              '17:35:00', '18:20:00', '18:30:00', '19:00:00']
+              '13:45:00', '14:30:00',
+              '14:40:00', '15:25:00',
+              '15:35:00', '16:20:00',
+              '16:40:00', '17:25:00',
+              '17:35:00', '18:20:00',
+              '18:30:00', '19:00:00']
 
 # Make array with bell times in seconds
 times_bell_sec = []
@@ -96,25 +104,28 @@ def alert_checker():
     url = "https://api.ukrainealarm.com/api/v3/alerts"
     # url = "https://api.ukrainealarm.com/api/v3/regions" # info about all regions
     global sound_alert_count
+    global alert_detect
+    global my_region
 
     headers = CaseInsensitiveDict()
     headers["accept"] = "application/json"
-    headers["Authorization"] = "Your API"
+    headers["Authorization"] = "YourAPI"
 
     try:
         resp = requests.get(url, headers=headers)
         print(resp.status_code)
 
         data = resp.json()
-        print(data[0])
+        #print(data[0])
 
         region_alert = []
         position = 12
 
+        # Scanning for region on alert and forming GUI
         for i in data:
             dict_data = dict(i)
             # print(dict_data["regionId"]) # 31 - Kyiv
-            region_alert.append(dict_data["regionName"])
+            region_alert.append(dict_data["regionId"])
 
             Label(window, text="Regions alert:", font=("Ubuntu", 8)).grid(row=position, column=0)
             Label(window, text=dict_data["regionName"], background="red", font=("Ubuntu", 8)).grid(row=position,
@@ -122,24 +133,27 @@ def alert_checker():
             position += 1
 
             siren_photo = PhotoImage(file="siren_pic.png")
-
             label_siren = Label(image=siren_photo)
             label_siren.image = siren_photo
-            label_siren.grid(row=8, column=5, columnspan=5, rowspan=7)
 
-            if dict_data["regionId"] == '16' and sound_alert_count > 0:
-                print("Alert in Kyiv!!!")
-                playsound(default_alert_sound)
+        if my_region in region_alert:
+            if sound_alert_count == 1:
+                print("ALERT IN KYIV!!!")
+
+                label_siren.grid(row=8, column=5, columnspan=5, rowspan=7)
+
                 sound_alert_count -= 1
-            elif dict_data["regionId"] == '16' and sound_alert_count < 1:
-                pass
-            else:
-                sound_alert_count = 2
-                label_siren.grid_remove()
-        #print(sound_alert_count)
-        print(region_alert)
+                playsound(default_alert_sound)
+                #print("Music test Playing")
+        else:
+            sound_alert_count = 1
+            label_siren.grid_remove()
+
+        # print(alert_detect)
+        # print(region_alert)
     except:
-        pass
+        print("Exception occurred!")
+
 
 # === Clock function + play music
 def tick():
