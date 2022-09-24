@@ -21,7 +21,7 @@ Setup in source file:
 - You could set up a number of lessons;
 - You could set up your region for air alert.
 
-![GitHub Logo](/program_gif.gif)
+![GitHub Logo](/program_gif2.gif)
 
 ## Getting Started
 
