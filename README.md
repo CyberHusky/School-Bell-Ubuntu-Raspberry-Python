@@ -44,7 +44,7 @@ pip3 install pyinstaller
 ```
 make executible file with next command:
 ```
-python3 -m pyinstaller --onefile <your_script_name>.py
+python3 -m PyInstaller --onefile <your_script_name>.py
 ```
 
 If you need to change num of lesson you should change "time_bell" value block in source file.
