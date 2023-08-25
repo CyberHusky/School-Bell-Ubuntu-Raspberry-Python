@@ -113,7 +113,7 @@ def alert_checker():
 
     try:
         resp = requests.get(url, headers=headers)
-        print(resp.status_code)
+        print(resp.status_code) # not nessesary. "200" are working status
 
         data = resp.json()
         #print(data[0])
