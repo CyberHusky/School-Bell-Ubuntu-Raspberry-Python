@@ -208,7 +208,7 @@ def tick():
     alert_checker()
 
     time.sleep(0.2)
-    tick()
+    # tick()
 
 
 # === END of Clock function
